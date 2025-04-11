@@ -25,6 +25,10 @@ export class UserService {
     });
   }
 
+  async findAll() {
+    return await this.userRepository.find();
+  }
+
   /**
    * 관리자 생성
    * @param admin

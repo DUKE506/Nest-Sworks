@@ -11,20 +11,26 @@ export class AuthService {
   ) {}
 
   /**
-   * 로그인 서비스
+   * 미들웨어(Guard)에서 사용
+   * @param account
+   * @param password
    * @returns
    */
-  async login(loginDto: LoginDto): Promise<{ access_token: string }> {
-    const user = await this.userService.findOne(loginDto.account);
-
-    if (user?.password !== loginDto.password) {
-      throw new UnauthorizedException();
+  async validateUser(account: string, password: string): Promise<any> {
+    console.log(account, password);
+    const user = await this.userService.findOne(account);
+    if (user && user.password === password) {
+      const { password, ...result } = user;
+      return result;
     }
+    return null;
+  }
 
-    const payload = { sub: user.id, name: user.name };
-
+  async login(user: any) {
+    const payload = { username: user.account, sub: user.userId };
     return {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: this.jwtService.sign(payload),
+      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
     };
   }
 }
