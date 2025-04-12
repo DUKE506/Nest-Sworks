@@ -9,10 +9,11 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
+import { Public } from 'src/core/decorator/public.decorator';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   @Get('all')
   async findAll(): Promise<User[] | null> {
@@ -30,6 +31,7 @@ export class UserController {
     return this.userService.findOne(account);
   }
 
+  @Public()
   @Post('create/admin')
   async creatAdmin(@Body() admin: User) {
     return this.userService.createAdmin(admin);

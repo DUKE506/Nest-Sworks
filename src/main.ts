@@ -9,6 +9,12 @@ async function bootstrap() {
     bufferLogs: true,
   });
 
+  app.enableCors({
+    origin: true,
+    credentials: true,
+    exposedHeaders: ['Authorization'], // * 사용할 헤더 추가.
+  });
+
   const options = new DocumentBuilder()
     .setTitle('S-Works API')
     .setDescription('S-Works 서버 API문서입니다.')
