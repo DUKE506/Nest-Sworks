@@ -15,6 +15,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from './config/typeorm.config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { WorkplaceController } from './workplace/workplace.controller';
+import { WorkplaceService } from './workplace/workplace.service';
+import { WorkplaceModule } from './workplace/workplace.module';
 
 @Module({
   imports: [
@@ -30,6 +33,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     UserModule,
     DepartmentModule,
     AuthModule,
+    WorkplaceModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
