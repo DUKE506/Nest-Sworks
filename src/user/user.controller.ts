@@ -13,7 +13,7 @@ import { Public } from 'src/core/decorator/public.decorator';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService) {}
 
   @Get('all')
   async findAll(): Promise<User[] | null> {
@@ -25,10 +25,21 @@ export class UserController {
    * @param account
    * @returns
    */
-  @Get(':account')
-  findOne(@Param('account') account: string): Promise<User | null> {
+  @Get('account/:account')
+  findOneByAccount(@Param('account') account: string): Promise<User | null> {
     console.log('파라미터 : ', account);
-    return this.userService.findOne(account);
+    return this.userService.findOneByAccount(account);
+  }
+
+  /**
+   * 테스트용으로 account받음
+   * @param id
+   * @returns
+   */
+  @Get('id/:id')
+  findOneById(@Param('id') id: number): Promise<User | null> {
+    console.log('파라미터 : ', id);
+    return this.userService.findOneById(id);
   }
 
   @Public()

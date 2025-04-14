@@ -14,4 +14,8 @@ export class DepartmentService {
   async createDept(dept: AddDeptDto) {
     return await this.deptRepository.insert(dept);
   }
+
+  async findAll(): Promise<Department[]> {
+    return await this.deptRepository.find();
+  }
 }

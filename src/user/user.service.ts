@@ -26,7 +26,9 @@ export class UserService {
   }
 
   async findAll() {
-    return await this.userRepository.find();
+    return await this.userRepository.find({
+      relations: { department: true },
+    });
   }
 
   /**
@@ -41,11 +43,21 @@ export class UserService {
     return res;
   }
 
-  async findOne(account: string): Promise<User | null> {
+  async findOneByAccount(account: string): Promise<User | null> {
     return await this.userRepository.findOne({
       where: {
         account,
       },
+      relations: { department: true },
+    });
+  }
+
+  async findOneById(id: number): Promise<User | null> {
+    return await this.userRepository.findOne({
+      where: {
+        id,
+      },
+      relations: { department: true },
     });
   }
 }
