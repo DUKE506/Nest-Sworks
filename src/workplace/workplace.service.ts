@@ -33,6 +33,13 @@ export class WorkplaceService {
     return data;
   }
 
+  async findOneById(id: number): Promise<Workplace | null> {
+    const workplace = await this.workplaceRepository.findOne({
+      where: { id },
+    });
+    return workplace;
+  }
+
   async createWorkplace(
     createWorkplaceDto: CreateWorkplaceDto,
   ): Promise<InsertResult> {

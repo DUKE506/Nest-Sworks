@@ -16,6 +16,7 @@ export class DepartmentController {
     return this.deptService.createDept(dept);
   }
 
+  @Public()
   @Get('all')
   async findAll(): Promise<Department[]> {
     return await this.deptService.findAll();

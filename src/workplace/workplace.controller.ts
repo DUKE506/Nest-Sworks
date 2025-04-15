@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { WorkplaceService } from './workplace.service';
 import { Workplace } from './entities/workplace.entity';
 import { CreateWorkplaceDto } from './dto/create-workplace.dto';
@@ -16,8 +16,10 @@ export class WorkplaceController {
     return await this.workplaceService.findAll(page, pageSize);
   }
 
-  @Get('/:id')
-  async findOne() {}
+  @Get(':id')
+  async findOne(@Param('id') id: number) {
+    return await this.workplaceService.findOneById(id);
+  }
 
   @Post('create')
   async addWorkplace(
