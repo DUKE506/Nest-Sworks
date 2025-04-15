@@ -19,7 +19,7 @@ export class WorkplaceController {
   @Get('/:id')
   async findOne() {}
 
-  @Post('add')
+  @Post('create')
   async addWorkplace(
     @Body() createWorkplaceDto: CreateWorkplaceDto,
   ): Promise<InsertResult> {
