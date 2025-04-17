@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/core/entity/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
+import { WorkplaceAdmin } from './workplcae-admin.entity';
 
 @Entity()
 export class Workplace extends BaseEntity {
@@ -141,4 +142,7 @@ export class Workplace extends BaseEntity {
   })
   @Column()
   permVoc: boolean;
+
+  @OneToMany(() => WorkplaceAdmin, (workplaceAdmin) => workplaceAdmin.workplace)
+  workplaceAdmins: WorkplaceAdmin[];
 }
