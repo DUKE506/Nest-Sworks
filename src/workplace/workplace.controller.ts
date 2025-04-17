@@ -19,7 +19,7 @@ export class WorkplaceController {
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    return await this.workplaceService.findOneById(id);
+    return await this.workplaceService.findDetailById(id);
   }
 
   @Post('create')

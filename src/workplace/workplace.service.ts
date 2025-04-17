@@ -8,6 +8,7 @@ import { WorkplaceAdmin } from './entities/workplcae-admin.entity';
 import { Transactional } from 'typeorm-transactional';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
+import { DetailWorkplaceDto } from './dto/detail-workplace.dto';
 
 @Injectable()
 export class WorkplaceService {
@@ -46,6 +47,30 @@ export class WorkplaceService {
       relations: ['workplaceAdmins.user'],
     });
     return workplace;
+  }
+
+  async findDetailById(id: number): Promise<DetailWorkplaceDto | null> {
+    const res = await this.workplaceRepository.findOne({
+      where: { id },
+      relations: ['workplaceAdmins.user', 'workplaceAdmins.user.department'],
+    });
+
+    if (!res) {
+      return null;
+    }
+
+    const { workplaceAdmins, ...rest } = res;
+
+    let filterWorkplaceAdmins = workplaceAdmins.map(
+      ({ user, ...rest }) => user,
+    );
+
+    const detailWorkplace: DetailWorkplaceDto = {
+      ...rest,
+      workplaceAdmins: filterWorkplaceAdmins,
+    };
+
+    return detailWorkplace;
   }
 
   async createWorkplace(
