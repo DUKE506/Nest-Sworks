@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/core/entity/base.entity';
 import { Department } from 'src/department/entities/department.entity';
-import { WorkplaceAdmin } from 'src/workplace/entities/workplcae-admin.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Workplace } from 'src/workplace/entities/workplace.entity';
+import { Column } from 'typeorm';
+import { UserPermissionType } from '../entities/user.entity';
 
-@Entity()
-export class User extends BaseEntity {
+export class DetailAdmin extends BaseEntity {
   /**
    * 이름
    * 아이디
@@ -67,18 +67,16 @@ export class User extends BaseEntity {
   @Column('varchar')
   permission: UserPermissionType;
 
-  @ManyToOne(() => Department, (department) => department.users)
+  @ApiProperty({
+    name: 'department',
+    description: '부서',
+    example: '시스템개발연구소',
+  })
   department: Department;
 
-  @OneToMany(() => WorkplaceAdmin, (workplaceAdmin) => workplaceAdmin.user)
-  workplace: WorkplaceAdmin[];
+  @ApiProperty({
+    name: 'workplace',
+    description: '담당 사업장',
+  })
+  workplaces: Workplace[];
 }
-
-const UserPermission = {
-  MANAGER: 'MANAGER',
-  NORMAL: 'NORMAL',
-  USER: 'USER',
-} as const;
-
-export type UserPermissionType =
-  (typeof UserPermission)[keyof typeof UserPermission];

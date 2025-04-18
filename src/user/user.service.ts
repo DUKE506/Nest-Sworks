@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { DetailAdmin } from './dto/detail-admin.dto';
 
 @Injectable()
 export class UserService {
@@ -59,5 +60,31 @@ export class UserService {
       },
       relations: { department: true },
     });
+  }
+
+  async findDetailById(id: number): Promise<DetailAdmin | null> {
+    const res = await this.userRepository.findOne({
+      where: {
+        id,
+      },
+      relations: ['department', 'workplace.workplace'],
+    });
+
+    if (!res) {
+      return null;
+    }
+
+    const { workplace, ...rest } = res;
+
+    const filterWorkplace = workplace.map(
+      ({ workplace, ...rest }) => workplace,
+    );
+
+    const detailAdmin: DetailAdmin = {
+      ...rest,
+      workplaces: filterWorkplace,
+    };
+
+    return detailAdmin;
   }
 }

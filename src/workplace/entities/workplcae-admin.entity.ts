@@ -8,6 +8,6 @@ export class WorkplaceAdmin extends BaseEntity {
   @ManyToOne(() => Workplace, (workplace) => workplace.workplaceAdmins)
   workplace: Workplace;
 
-  @ManyToOne(() => User, (user) => user.workplaceAdmins)
+  @ManyToOne(() => User, (user) => user.workplace)
   user: User;
 }

@@ -10,6 +10,7 @@ import {
 import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { Public } from 'src/core/decorator/public.decorator';
+import { DetailAdmin } from './dto/detail-admin.dto';
 
 @Controller('user')
 export class UserController {
@@ -36,10 +37,10 @@ export class UserController {
    * @param id
    * @returns
    */
-  @Get('id/:id')
-  findOneById(@Param('id') id: number): Promise<User | null> {
+  @Get(':id')
+  findOneById(@Param('id') id: number): Promise<DetailAdmin | null> {
     console.log('파라미터 : ', id);
-    return this.userService.findOneById(id);
+    return this.userService.findDetailById(id);
   }
 
   @Public()
