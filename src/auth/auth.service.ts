@@ -8,7 +8,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   /**
    * 미들웨어(Guard)에서 사용
@@ -27,7 +27,7 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.account, sub: user.userId };
+    const payload = { username: user.account, sub: user.userId, permission: user.permission };
     return {
       access_token: this.jwtService.sign(payload),
       refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),

@@ -18,5 +18,6 @@ export const typeOrmConfig = async (
     //매 실행마다 스키마 재생성
     dropSchema: false,
     autoLoadEntities: true,
+
   };
 };
