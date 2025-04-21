@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Workplace } from './entities/workplace.entity';
-import { InsertResult, Repository } from 'typeorm';
+import { InsertResult, Repository, UpdateResult } from 'typeorm';
 import { CreateWorkplaceDto } from './dto/create-workplace.dto';
 import { ListModel } from 'src/core/dto/list-type.dto';
 import { WorkplaceAdmin } from './entities/workplcae-admin.entity';
@@ -9,6 +9,7 @@ import { Transactional } from 'typeorm-transactional';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
 import { DetailWorkplaceDto } from './dto/detail-workplace.dto';
+import { EditPermDto } from './dto/edit-perm.dto';
 
 @Injectable()
 export class WorkplaceService {
@@ -99,5 +100,13 @@ export class WorkplaceService {
 
       return res;
     }
+  }
+
+  async editPerm(perms: EditPermDto, id: number): Promise<UpdateResult> {
+    const res = await this.workplaceRepository.update(id, {
+      ...perms,
+    });
+    console.log(res);
+    return res;
   }
 }
