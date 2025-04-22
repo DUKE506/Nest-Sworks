@@ -13,7 +13,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin: true,
+    origin: '*',
     credentials: true,
     exposedHeaders: ['Authorization'], // * 사용할 헤더 추가.
   });
