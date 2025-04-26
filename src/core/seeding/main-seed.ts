@@ -11,7 +11,7 @@ const dataSource = new DataSource({
   host: 'localhost',
   port: 5432,
   username: 'postgres',
-  password: 'stecdev1234!',
+  password: 'memory506',
   database: 'sworks',
   entities: [Department, User, Workplace, WorkplaceAdmin],
   synchronize: true, // 개발 환경에서만 사용

@@ -6,12 +6,11 @@ import { Public } from 'src/core/decorator/public.decorator';
 
 @Controller('department')
 export class DepartmentController {
-  constructor(private deptService: DepartmentService) {}
+  constructor(private deptService: DepartmentService) { }
 
   @Public()
   @Post('add')
   async createDept(@Body() dept: AddDeptDto) {
-    console.log(dept);
 
     return this.deptService.createDept(dept);
   }
