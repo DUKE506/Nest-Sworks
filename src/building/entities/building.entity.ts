@@ -1,5 +1,6 @@
 import { BaseEntity } from "src/core/entity/base.entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
+import { Floor } from "./floor.entity";
 
 
 
@@ -147,4 +148,7 @@ export class Building extends BaseEntity {
 
     @Column()
     cesspoolCapacity: string;
+
+    @OneToMany(() => Floor, (floor) => floor.building)
+    floor: Floor[];
 }
