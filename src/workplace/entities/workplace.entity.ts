@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/core/entity/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
-import { WorkplaceAdmin } from './workplcae-admin.entity';
+import { WorkplaceAdmin } from './workplace-admin.entity';
 
 @Entity()
 export class Workplace extends BaseEntity {

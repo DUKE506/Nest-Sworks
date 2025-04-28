@@ -1,15 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DetailAdmin } from './dto/detail-admin.dto';
 import { CreateUser } from './dto/create-user.dto';
+import { WorkplaceService } from 'src/workplace/workplace.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+
+    @Inject(forwardRef(() => WorkplaceService))
+    private workplaceService: WorkplaceService,
   ) {}
 
   private readonly user: User;
@@ -27,8 +36,9 @@ export class UserService {
     });
   }
 
-  async findAll() {
+  async findAdminAll() {
     return await this.userRepository.find({
+      where: [{ permission: 'MANAGER' }, { permission: 'NORMAL' }],
       relations: { department: true },
     });
   }
@@ -39,10 +49,7 @@ export class UserService {
    * @returns
    */
   async createAdmin(admin: User) {
-    const res = await this.userRepository.insert(admin);
-    console.log('결과 : ', res);
-
-    return res;
+    return await this.userRepository.insert(admin);
   }
 
   async findOneByAccount(account: string): Promise<User | null> {
@@ -54,6 +61,11 @@ export class UserService {
     });
   }
 
+  /**
+   * 상세조회회
+   * @param id
+   * @returns
+   */
   async findOneById(id: number): Promise<User | null> {
     return await this.userRepository.findOne({
       where: {
@@ -63,7 +75,12 @@ export class UserService {
     });
   }
 
-  async findDetailById(id: number): Promise<DetailAdmin | null> {
+  /**
+   * 관리자 상세조회
+   * @param id
+   * @returns
+   */
+  async findAdminDetailById(id: number): Promise<DetailAdmin | null> {
     const res = await this.userRepository.findOne({
       where: {
         id,
@@ -89,7 +106,20 @@ export class UserService {
     return detailAdmin;
   }
 
+  /**
+   * 일반 사용자 생성
+   * @param user
+   */
   async createUser(user: CreateUser) {
     console.log(user);
+    return await this.userRepository.insert({
+      ...user,
+      permission: 'USER',
+    });
+  }
+
+  async findUserAll(placeid: number) {
+    const workplace = await this.workplaceService.findOneById(placeid);
+    if (!workplace) new NotFoundException('사업장이 존재하지 않습니다.');
   }
 }

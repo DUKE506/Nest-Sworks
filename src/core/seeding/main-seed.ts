@@ -3,7 +3,7 @@ import { Department } from 'src/department/entities/department.entity';
 import { CreateAdmin } from 'src/user/dto/create-admin.dto';
 import { User } from 'src/user/entities/user.entity';
 import { Workplace } from 'src/workplace/entities/workplace.entity';
-import { WorkplaceAdmin } from 'src/workplace/entities/workplcae-admin.entity';
+import { WorkplaceAdmin } from 'src/workplace/entities/workplace-admin.entity';
 import { DataSource } from 'typeorm';
 
 const dataSource = new DataSource({
@@ -11,7 +11,7 @@ const dataSource = new DataSource({
   host: 'localhost',
   port: 5432,
   username: 'postgres',
-  password: 'stecdev1234!',
+  password: 'MEMORY506',
   database: 'sworks',
   entities: [Department, User, Workplace, WorkplaceAdmin],
   synchronize: true, // 개발 환경에서만 사용

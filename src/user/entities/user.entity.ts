@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/core/entity/base.entity';
 import { Department } from 'src/department/entities/department.entity';
-import { WorkplaceAdmin } from 'src/workplace/entities/workplcae-admin.entity';
+import { WorkplaceAdmin } from 'src/workplace/entities/workplace-admin.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
@@ -72,7 +72,7 @@ export class User extends BaseEntity {
     description: '기본권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   basicPerm: number;
 
   @ApiProperty({
@@ -80,7 +80,7 @@ export class User extends BaseEntity {
     description: '기계설비 권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   machinePerm: number;
 
   @ApiProperty({
@@ -88,7 +88,7 @@ export class User extends BaseEntity {
     description: '전기설비 권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   electricPerm: number;
 
   @ApiProperty({
@@ -96,7 +96,7 @@ export class User extends BaseEntity {
     description: '기소방설비 권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   firePerm: number;
 
   @ApiProperty({
@@ -104,7 +104,7 @@ export class User extends BaseEntity {
     description: '건축설비 권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   buildingPerm: number;
 
   @ApiProperty({
@@ -112,7 +112,7 @@ export class User extends BaseEntity {
     description: '통신설비 권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   networkPerm: number;
 
   @ApiProperty({
@@ -120,7 +120,7 @@ export class User extends BaseEntity {
     description: '미화설비 권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   beautyPerm: number;
 
   @ApiProperty({
@@ -128,7 +128,7 @@ export class User extends BaseEntity {
     description: '보안설비 권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   securityPerm: number;
 
   @ApiProperty({
@@ -136,7 +136,7 @@ export class User extends BaseEntity {
     description: '사용자권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   userPerm: number;
 
   @ApiProperty({
@@ -144,7 +144,7 @@ export class User extends BaseEntity {
     description: '민원권한',
     example: '2',
   })
-  @Column()
+  @Column({ nullable: true })
   vocPerm: number;
 
   @ManyToOne(() => Department, (department) => department.users)

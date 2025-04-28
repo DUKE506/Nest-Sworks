@@ -1,10 +1,15 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Workplace } from './entities/workplace.entity';
 import { InsertResult, Repository, UpdateResult } from 'typeorm';
 import { CreateWorkplaceDto } from './dto/create-workplace.dto';
 import { ListModel } from 'src/core/dto/list-type.dto';
-import { WorkplaceAdmin } from './entities/workplcae-admin.entity';
+import { WorkplaceAdmin } from './entities/workplace-admin.entity';
 import { Transactional } from 'typeorm-transactional';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
@@ -18,6 +23,8 @@ export class WorkplaceService {
     private workplaceRepository: Repository<Workplace>,
     @InjectRepository(WorkplaceAdmin)
     private workplaceAdminRepository: Repository<WorkplaceAdmin>,
+
+    @Inject(forwardRef(() => UserService))
     private userService: UserService,
   ) {}
 

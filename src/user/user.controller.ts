@@ -19,7 +19,7 @@ export class UserController {
 
   @Get('all')
   async findAll(): Promise<User[] | null> {
-    return await this.userService.findAll();
+    return await this.userService.findAdminAll();
   }
 
   /**
@@ -41,7 +41,7 @@ export class UserController {
   @Get(':id')
   findOneById(@Param('id') id: number): Promise<DetailAdmin | null> {
     console.log('파라미터 : ', id);
-    return this.userService.findDetailById(id);
+    return this.userService.findAdminDetailById(id);
   }
 
   @Public()
