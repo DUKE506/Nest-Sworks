@@ -11,6 +11,7 @@ import { UserService } from './user.service';
 import { User } from './entities/user.entity';
 import { Public } from 'src/core/decorator/public.decorator';
 import { DetailAdmin } from './dto/detail-admin.dto';
+import { CreateUser } from './dto/create-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -45,7 +46,13 @@ export class UserController {
 
   @Public()
   @Post('create/admin')
-  async creatAdmin(@Body() admin: User) {
+  async createAdmin(@Body() admin: User) {
     return this.userService.createAdmin(admin);
+  }
+
+  @Public()
+  @Post('create/user')
+  async createUser(@Body() user: CreateUser) {
+    return this.userService.createUser(user);
   }
 }

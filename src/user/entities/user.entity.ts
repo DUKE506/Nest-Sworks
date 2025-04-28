@@ -67,6 +67,86 @@ export class User extends BaseEntity {
   @Column('varchar')
   permission: UserPermissionType;
 
+  @ApiProperty({
+    name: 'basicPerm',
+    description: '기본권한',
+    example: '2',
+  })
+  @Column()
+  basicPerm: number;
+
+  @ApiProperty({
+    name: 'machinePerm',
+    description: '기계설비 권한',
+    example: '2',
+  })
+  @Column()
+  machinePerm: number;
+
+  @ApiProperty({
+    name: 'electricPerm',
+    description: '전기설비 권한',
+    example: '2',
+  })
+  @Column()
+  electricPerm: number;
+
+  @ApiProperty({
+    name: 'firePerm',
+    description: '기소방설비 권한',
+    example: '2',
+  })
+  @Column()
+  firePerm: number;
+
+  @ApiProperty({
+    name: 'buildingPerm',
+    description: '건축설비 권한',
+    example: '2',
+  })
+  @Column()
+  buildingPerm: number;
+
+  @ApiProperty({
+    name: 'networkPerm',
+    description: '통신설비 권한',
+    example: '2',
+  })
+  @Column()
+  networkPerm: number;
+
+  @ApiProperty({
+    name: 'beautyPerm',
+    description: '미화설비 권한',
+    example: '2',
+  })
+  @Column()
+  beautyPerm: number;
+
+  @ApiProperty({
+    name: 'securityPerm',
+    description: '보안설비 권한',
+    example: '2',
+  })
+  @Column()
+  securityPerm: number;
+
+  @ApiProperty({
+    name: 'userPerm',
+    description: '사용자권한',
+    example: '2',
+  })
+  @Column()
+  userPerm: number;
+
+  @ApiProperty({
+    name: 'vocPerm',
+    description: '민원권한',
+    example: '2',
+  })
+  @Column()
+  vocPerm: number;
+
   @ManyToOne(() => Department, (department) => department.users)
   department: Department;
 

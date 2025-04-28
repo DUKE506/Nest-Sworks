@@ -11,7 +11,7 @@ const dataSource = new DataSource({
   host: 'localhost',
   port: 5432,
   username: 'postgres',
-  password: 'memory506',
+  password: 'stecdev1234!',
   database: 'sworks',
   entities: [Department, User, Workplace, WorkplaceAdmin],
   synchronize: true, // 개발 환경에서만 사용
@@ -42,7 +42,7 @@ const seed = async () => {
     permission: 'MANAGER',
     department: resDept,
   };
-  console.log('Addming Admin...');
+  console.log('Adding Admin...');
   await userRepository.insert(user);
   console.log('Admin Success');
 };

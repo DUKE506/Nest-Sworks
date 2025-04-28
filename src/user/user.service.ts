@@ -3,6 +3,7 @@ import { User } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DetailAdmin } from './dto/detail-admin.dto';
+import { CreateUser } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
@@ -86,5 +87,9 @@ export class UserService {
     };
 
     return detailAdmin;
+  }
+
+  async createUser(user: CreateUser) {
+    console.log(user);
   }
 }
