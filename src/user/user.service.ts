@@ -57,7 +57,7 @@ export class UserService {
       where: {
         account,
       },
-      relations: { department: true },
+      relations: { department: true, workplace: true },
     });
   }
 
@@ -92,9 +92,9 @@ export class UserService {
       return null;
     }
 
-    const { workplace, ...rest } = res;
+    const { workplaces, ...rest } = res;
 
-    const filterWorkplace = workplace.map(
+    const filterWorkplace = workplaces.map(
       ({ workplace, ...rest }) => workplace,
     );
 
@@ -110,16 +110,21 @@ export class UserService {
    * 일반 사용자 생성
    * @param user
    */
-  async createUser(user: CreateUser) {
-    console.log(user);
+  async createUser(user: CreateUser, placeid: number) {
+    const workplace = await this.workplaceService.findOneById(placeid);
+    if (!workplace) {
+      return new NotFoundException('사업장이 존재하지않습니다.');
+    }
+
     return await this.userRepository.insert({
       ...user,
       permission: 'USER',
+      workplace: { id: workplace.id },
     });
   }
 
   async findUserAll(placeid: number) {
     const workplace = await this.workplaceService.findOneById(placeid);
-    if (!workplace) new NotFoundException('사업장이 존재하지 않습니다.');
+    if (!workplace) return new NotFoundException('사업장이 존재하지 않습니다.');
   }
 }

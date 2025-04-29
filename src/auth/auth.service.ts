@@ -8,7 +8,7 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   /**
    * 미들웨어(Guard)에서 사용
@@ -17,7 +17,6 @@ export class AuthService {
    * @returns
    */
   async validateUser(account: string, password: string): Promise<any> {
-    console.log(account, password);
     const user = await this.userService.findOneByAccount(account);
     if (user && user.password === password) {
       const { password, ...result } = user;
@@ -27,10 +26,16 @@ export class AuthService {
   }
 
   async login(user: any) {
-    const payload = { username: user.account, sub: user.userId, permission: user.permission };
+    const payload = {
+      username: user.account,
+      sub: user.userId,
+      permission: user.permission,
+    };
+
     return {
       access_token: this.jwtService.sign(payload),
       refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
+      place_id: user?.workplace?.id ?? null,
     };
   }
 }

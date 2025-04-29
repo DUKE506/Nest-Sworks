@@ -40,7 +40,7 @@ export class WorkplaceController {
   @Post('create')
   async addWorkplace(
     @Body() createWorkplaceDto: CreateWorkplaceDto,
-  ): Promise<InsertResult> {
+  ): Promise<Workplace> {
     return await this.workplaceService.createWorkplace(createWorkplaceDto);
   }
 

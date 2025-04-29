@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/core/entity/base.entity';
 import { Department } from 'src/department/entities/department.entity';
 import { WorkplaceAdmin } from 'src/workplace/entities/workplace-admin.entity';
+import { Workplace } from 'src/workplace/entities/workplace.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
@@ -151,7 +152,10 @@ export class User extends BaseEntity {
   department: Department;
 
   @OneToMany(() => WorkplaceAdmin, (workplaceAdmin) => workplaceAdmin.user)
-  workplace: WorkplaceAdmin[];
+  workplaces: WorkplaceAdmin[];
+
+  @ManyToOne(() => Workplace, (workplace) => workplace.users)
+  workplace: Workplace;
 }
 
 const UserPermission = {

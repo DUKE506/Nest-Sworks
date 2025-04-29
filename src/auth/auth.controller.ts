@@ -5,6 +5,7 @@ import {
   HttpStatus,
   Post,
   HttpCode,
+  Param,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from 'src/core/decorator/public.decorator';

@@ -51,8 +51,11 @@ export class UserController {
   }
 
   @Public()
-  @Post('create/user')
-  async createUser(@Body() user: CreateUser) {
-    return this.userService.createUser(user);
+  @Post('create/user/:placeid')
+  async createUser(
+    @Body() user: CreateUser,
+    @Param('placeid') placeid: number,
+  ) {
+    return this.userService.createUser(user, placeid);
   }
 }

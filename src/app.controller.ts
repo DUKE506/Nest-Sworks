@@ -6,6 +6,7 @@ import {
   UseGuards,
   Body,
   HttpCode,
+  Param,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -19,14 +20,13 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private authService: AuthService,
-  ) { }
+  ) {}
 
   @Public()
   @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
     console.log(req.user);
-
     return this.authService.login(req.user);
   }
 

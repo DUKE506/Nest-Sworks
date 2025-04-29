@@ -15,6 +15,8 @@ import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/entities/user.entity';
 import { DetailWorkplaceDto } from './dto/detail-workplace.dto';
 import { EditPermDto } from './dto/edit-perm.dto';
+import { CreateUser } from 'src/user/dto/create-user.dto';
+import * as Inko from 'inko';
 
 @Injectable()
 export class WorkplaceService {
@@ -28,6 +30,12 @@ export class WorkplaceService {
     private userService: UserService,
   ) {}
 
+  /**
+   * 사업장 전체조회
+   * @param page
+   * @param pageSize
+   * @returns
+   */
   async findAll(page: number, pageSize: number) {
     const [items, totalCount] = await this.workplaceRepository.findAndCount({
       skip: (page - 1) * pageSize,
@@ -49,6 +57,11 @@ export class WorkplaceService {
     return data;
   }
 
+  /**
+   * 사업장 아이디 조회
+   * @param id
+   * @returns
+   */
   async findOneById(id: number): Promise<Workplace | null> {
     const workplace = await this.workplaceRepository.findOne({
       where: { id },
@@ -57,6 +70,11 @@ export class WorkplaceService {
     return workplace;
   }
 
+  /**
+   * 사업장 상세조회
+   * @param id
+   * @returns
+   */
   async findDetailById(id: number): Promise<DetailWorkplaceDto | null> {
     const res = await this.workplaceRepository.findOne({
       where: { id },
@@ -81,10 +99,41 @@ export class WorkplaceService {
     return detailWorkplace;
   }
 
+  /**
+   * 사업장생성
+   * @param createWorkplaceDto
+   * @returns
+   */
   async createWorkplace(
     createWorkplaceDto: CreateWorkplaceDto,
-  ): Promise<InsertResult> {
-    return await this.workplaceRepository.insert(createWorkplaceDto);
+  ): Promise<Workplace> {
+    const { name, tel } = createWorkplaceDto;
+    const workplace = await this.workplaceRepository.save(createWorkplaceDto);
+
+    const password = new (Inko as any)().ko2en(name);
+
+    const createUser: CreateUser = {
+      name: name,
+      account: name,
+      password,
+      email: `name@s-tec.co.kr`,
+      phone: tel,
+      permission: 'USER',
+      basicPerm: 2,
+      machinePerm: 2,
+      electricPerm: 2,
+      firePerm: 2,
+      buildingPerm: 2,
+      networkPerm: 2,
+      beautyPerm: 2,
+      securityPerm: 2,
+      userPerm: 2,
+      vocPerm: 2,
+    };
+
+    await this.userService.createUser(createUser, workplace.id);
+
+    return workplace;
   }
 
   @Transactional()
