@@ -5,6 +5,9 @@ import { User } from 'src/user/entities/user.entity';
 import { Workplace } from 'src/workplace/entities/workplace.entity';
 import { WorkplaceAdmin } from 'src/workplace/entities/workplace-admin.entity';
 import { DataSource } from 'typeorm';
+import { Building } from 'src/building/entities/building.entity';
+import { Floor } from 'src/building/entities/floor.entity';
+import { Room } from 'src/building/entities/room.entity';
 
 const dataSource = new DataSource({
   type: 'postgres', // 사용 중인 데이터베이스 타입
@@ -13,7 +16,15 @@ const dataSource = new DataSource({
   username: 'postgres',
   password: 'stecdev1234!',
   database: 'sworks',
-  entities: [Department, User, Workplace, WorkplaceAdmin],
+  entities: [
+    Department,
+    User,
+    Workplace,
+    WorkplaceAdmin,
+    Building,
+    Floor,
+    Room,
+  ],
   synchronize: true, // 개발 환경에서만 사용
 });
 
@@ -43,7 +54,7 @@ const seed = async () => {
     department: resDept,
   };
   console.log('Adding Admin...');
-  await userRepository.insert(user);
+  await userRepository.insert({ ...user, status: 'WORK' });
   console.log('Admin Success');
 };
 

@@ -58,4 +58,10 @@ export class UserController {
   ) {
     return this.userService.createUser(user, placeid);
   }
+
+  @Public()
+  @Get('/all/:workplaceid')
+  async findAllUser(@Param('workplaceid') workplaceid: number) {
+    return this.userService.findUserAll(workplaceid);
+  }
 }

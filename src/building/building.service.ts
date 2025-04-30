@@ -20,14 +20,19 @@ export class BuildingService {
 
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
-  ) { }
+  ) {}
 
-  async findAllBuilding() {
-    return await this.buildingRepository.find({});
+  async findAllBuilding(workplaceid: number) {
+    return await this.buildingRepository.find({
+      where: { workplace: { id: workplaceid } },
+    });
   }
 
-  async createBuilding(building: CreateBuilding) {
-    return await this.buildingRepository.insert(building);
+  async createBuilding(building: CreateBuilding, workplaceid) {
+    return await this.buildingRepository.insert({
+      ...building,
+      workplace: { id: workplaceid },
+    });
   }
 
   async findOneById(id: number) {
@@ -40,52 +45,57 @@ export class BuildingService {
   async findAllFloor(buildingid: number) {
     const building = await this.findOneById(buildingid);
 
-
     if (!building) {
-      throw new NotFoundException(`건물이 존재하지 않습니다.`)
+      throw new NotFoundException(`건물이 존재하지 않습니다.`);
     }
-
 
     return await this.floorRepository.find({
       relations: { rooms: true },
-      where: { building: { id: buildingid } }
-    })
+      where: { building: { id: buildingid } },
+    });
   }
 
   async createFloor(floor: CreateFloor, buildingid: number) {
     const building = await this.findOneById(buildingid);
 
     if (!building) {
-      throw new NotFoundException(`건물이 존재하지 않습니다.`)
+      throw new NotFoundException(`건물이 존재하지 않습니다.`);
     }
 
-    return await this.floorRepository.save({ ...floor, building })
+    return await this.floorRepository.save({ ...floor, building });
   }
 
   async findOneFloorById(buildingid: number, floorid: number) {
     const building = await this.findOneById(buildingid);
 
     if (!building) {
-      throw new NotFoundException(`건물이 존재하지 않습니다.`)
+      throw new NotFoundException(`건물이 존재하지 않습니다.`);
     }
 
     return await this.floorRepository.findOne({
-      where: { id: floorid, building: { id: building.id } }
-    })
+      where: { id: floorid, building: { id: building.id } },
+    });
   }
-
 
   /**
    * 위치
    */
 
   async createRoom(room: CreateRoom, buildingid: number, floorid: number) {
-
     const floor = await this.findOneFloorById(buildingid, floorid);
     if (!floor) {
-      throw new NotFoundException(`층이 존재하지 않습니다.`)
+      throw new NotFoundException(`층이 존재하지 않습니다.`);
     }
 
-    return await this.roomRepository.save({ ...room, floor: { id: floorid } })
+    return await this.roomRepository.save({ ...room, floor: { id: floorid } });
+  }
+
+  /**
+   * 건물, 층, 위치 조회
+   */
+  async findAllLocationTree(workplaceid: number) {
+    return await this.buildingRepository.find({
+      relations: { floor: { rooms: true } },
+    });
   }
 }

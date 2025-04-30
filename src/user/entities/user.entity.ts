@@ -69,6 +69,14 @@ export class User extends BaseEntity {
   permission: UserPermissionType;
 
   @ApiProperty({
+    name: 'status',
+    description: '상태',
+    example: 'WORK',
+  })
+  @Column('varchar')
+  status: 'WORK' | 'OFF' | 'RESIGN';
+
+  @ApiProperty({
     name: 'basicPerm',
     description: '기본권한',
     example: '2',

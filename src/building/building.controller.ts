@@ -8,18 +8,23 @@ import { CreateRoom } from './dto/create-room.dto';
 
 @Controller('building')
 export class BuildingController {
-  constructor(private buildingService: BuildingService) { }
+  constructor(private buildingService: BuildingService) {}
 
   @Public()
-  @Get('all')
-  async findAll(): Promise<Building[]> {
-    return await this.buildingService.findAllBuilding();
+  @Get('all/:workplaceid')
+  async findAll(
+    @Param('workplaceid') workplaceid: number,
+  ): Promise<Building[]> {
+    return await this.buildingService.findAllBuilding(workplaceid);
   }
 
   @Public()
-  @Post('create')
-  async createBuilding(@Body() building: CreateBuilding) {
-    return await this.buildingService.createBuilding(building);
+  @Post('create/:workplaceid')
+  async createBuilding(
+    @Body() building: CreateBuilding,
+    @Param('workplaceid') workplaceid: number,
+  ) {
+    return await this.buildingService.createBuilding(building, workplaceid);
   }
 
   @Public()
@@ -33,7 +38,7 @@ export class BuildingController {
   @Public()
   @Post(':id/floor/add')
   async createFloor(@Body() floor: CreateFloor, @Param('id') id: number) {
-    return await this.buildingService.createFloor(floor, id)
+    return await this.buildingService.createFloor(floor, id);
   }
 
   @Public()
@@ -42,13 +47,25 @@ export class BuildingController {
     return await this.buildingService.findAllFloor(id);
   }
 
-
   //=======위치=======
 
   @Public()
   @Post(':buildingid/room/:floorid/add')
-  async createRoom(@Body() createRoom: CreateRoom, @Param('buildingid') buildingid: number, @Param('floorid') floorid: number) {
-    return await this.buildingService.createRoom(createRoom, buildingid, floorid)
+  async createRoom(
+    @Body() createRoom: CreateRoom,
+    @Param('buildingid') buildingid: number,
+    @Param('floorid') floorid: number,
+  ) {
+    return await this.buildingService.createRoom(
+      createRoom,
+      buildingid,
+      floorid,
+    );
   }
 
+  @Public()
+  @Get('floor/room/:workplaceid')
+  async(@Param('workplaceid') workplaceid: number) {
+    return this.buildingService.findAllLocationTree(workplaceid);
+  }
 }

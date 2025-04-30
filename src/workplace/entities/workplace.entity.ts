@@ -3,6 +3,7 @@ import { BaseEntity } from 'src/core/entity/base.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { WorkplaceAdmin } from './workplace-admin.entity';
 import { User } from 'src/user/entities/user.entity';
+import { Building } from 'src/building/entities/building.entity';
 
 @Entity()
 export class Workplace extends BaseEntity {
@@ -149,4 +150,7 @@ export class Workplace extends BaseEntity {
 
   @OneToMany(() => User, (user) => user.workplace)
   users: User[];
+
+  @OneToMany(() => Building, (building) => building.workplace)
+  buildings: Building[];
 }

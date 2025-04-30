@@ -49,7 +49,7 @@ export class UserService {
    * @returns
    */
   async createAdmin(admin: User) {
-    return await this.userRepository.insert(admin);
+    return await this.userRepository.insert({ ...admin, status: 'WORK' });
   }
 
   async findOneByAccount(account: string): Promise<User | null> {
@@ -119,6 +119,7 @@ export class UserService {
     return await this.userRepository.insert({
       ...user,
       permission: 'USER',
+      status: 'WORK',
       workplace: { id: workplace.id },
     });
   }
@@ -126,5 +127,9 @@ export class UserService {
   async findUserAll(placeid: number) {
     const workplace = await this.workplaceService.findOneById(placeid);
     if (!workplace) return new NotFoundException('사업장이 존재하지 않습니다.');
+
+    return await this.userRepository.find({
+      where: { workplace: { id: placeid } },
+    });
   }
 }
