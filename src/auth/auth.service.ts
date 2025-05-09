@@ -36,6 +36,7 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
       refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
       place_id: user?.workplace?.id ?? null,
+      user: user,
     };
   }
 }

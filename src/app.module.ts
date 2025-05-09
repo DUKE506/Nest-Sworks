@@ -12,9 +12,8 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { WorkplaceModule } from './workplace/workplace.module';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
-import { BuildingController } from './building/building.controller';
-import { BuildingService } from './building/building.service';
 import { BuildingModule } from './building/building.module';
+import { FacilityModule } from './facility/facility.module';
 
 @Module({
   imports: [
@@ -38,8 +37,9 @@ import { BuildingModule } from './building/building.module';
     AuthModule,
     WorkplaceModule,
     BuildingModule,
+    FacilityModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
-export class AppModule { }
+export class AppModule {}

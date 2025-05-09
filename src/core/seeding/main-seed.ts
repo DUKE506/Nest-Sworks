@@ -8,6 +8,7 @@ import { DataSource } from 'typeorm';
 import { Building } from 'src/building/entities/building.entity';
 import { Floor } from 'src/building/entities/floor.entity';
 import { Room } from 'src/building/entities/room.entity';
+import { Facility } from 'src/facility/entities/facility.enrity';
 
 const dataSource = new DataSource({
   type: 'postgres', // 사용 중인 데이터베이스 타입
@@ -24,6 +25,7 @@ const dataSource = new DataSource({
     Building,
     Floor,
     Room,
+    Facility,
   ],
   synchronize: true, // 개발 환경에서만 사용
 });

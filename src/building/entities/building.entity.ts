@@ -148,7 +148,7 @@ export class Building extends BaseEntity {
   cesspoolCapacity: string;
 
   @OneToMany(() => Floor, (floor) => floor.building)
-  floor: Floor[];
+  floors: Floor[];
 
   @ManyToOne(() => Workplace, (workplace) => workplace.buildings)
   workplace: Workplace;

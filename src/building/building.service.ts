@@ -81,6 +81,15 @@ export class BuildingService {
    * 위치
    */
 
+  async findOneRoomById(id: number) {
+    const room = await this.roomRepository.findOne({ where: { id } });
+
+    if (!room) {
+      throw new NotFoundException(`층이 존재하지 않습니다.`);
+    }
+    return room;
+  }
+
   async createRoom(room: CreateRoom, buildingid: number, floorid: number) {
     const floor = await this.findOneFloorById(buildingid, floorid);
     if (!floor) {
@@ -95,7 +104,7 @@ export class BuildingService {
    */
   async findAllLocationTree(workplaceid: number) {
     return await this.buildingRepository.find({
-      relations: { floor: { rooms: true } },
+      relations: { floors: { rooms: true } },
     });
   }
 }
