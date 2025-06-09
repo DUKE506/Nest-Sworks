@@ -35,8 +35,25 @@ export class BuildingService {
     });
   }
 
+  //식별자 조회
   async findOneById(id: number) {
     return await this.buildingRepository.findOne({ where: { id } });
+  }
+
+  async findOneByName(name: string) {
+    return await this.buildingRepository.findOne({ where: { name } });
+  }
+
+  /**
+   * 사업장 내 건물 명칭 조회
+   * @param workplaceid
+   * @returns
+   */
+  async findAllBuildingName(workplaceid: number) {
+    return await this.buildingRepository.find({
+      select: { id: true, name: true },
+      where: { workplace: { id: workplaceid } },
+    });
   }
 
   /**

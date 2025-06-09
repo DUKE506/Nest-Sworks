@@ -33,6 +33,12 @@ export class BuildingController {
     return await this.buildingService.findOneById(id);
   }
 
+  @Public()
+  @Get('all/name/:id')
+  async findAllName(@Param('workplaceid') workplaceid: number) {
+    return await this.buildingService.findAllBuildingName(workplaceid);
+  }
+
   //=======층=======
 
   @Public()

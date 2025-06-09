@@ -14,6 +14,9 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { BuildingModule } from './building/building.module';
 import { FacilityModule } from './facility/facility.module';
+import { VocController } from './voc/voc.controller';
+import { VocService } from './voc/voc.service';
+import { VocModule } from './voc/voc.module';
 
 @Module({
   imports: [
@@ -38,6 +41,7 @@ import { FacilityModule } from './facility/facility.module';
     WorkplaceModule,
     BuildingModule,
     FacilityModule,
+    VocModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

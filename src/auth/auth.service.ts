@@ -29,12 +29,17 @@ export class AuthService {
     const payload = {
       username: user.account,
       sub: user.userId,
-      permission: user.permission,
+      role: user.permission,
     };
 
     return {
-      access_token: this.jwtService.sign(payload),
-      refresh_token: this.jwtService.sign(payload, { expiresIn: '7d' }),
+      access_token: this.jwtService.sign(payload, {
+        secret: process.env.ACCESS_TOKEN_SECRET_KEY,
+      }),
+      refresh_token: this.jwtService.sign(payload, {
+        secret: process.env.REFRESH_TOKEN_SECRET_KEY,
+        expiresIn: '7d',
+      }),
       place_id: user?.workplace?.id ?? null,
       user: user,
     };

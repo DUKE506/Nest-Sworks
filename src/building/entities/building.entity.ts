@@ -2,6 +2,7 @@ import { BaseEntity } from 'src/core/entity/base.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { Floor } from './floor.entity';
 import { Workplace } from 'src/workplace/entities/workplace.entity';
+import { Voc } from 'src/voc/entities/voc.entity';
 
 @Entity()
 export class Building extends BaseEntity {
@@ -152,4 +153,7 @@ export class Building extends BaseEntity {
 
   @ManyToOne(() => Workplace, (workplace) => workplace.buildings)
   workplace: Workplace;
+
+  @OneToMany(() => Voc, (voc) => voc.building)
+  vocs: Voc[];
 }
