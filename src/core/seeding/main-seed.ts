@@ -16,7 +16,7 @@ const dataSource = new DataSource({
   host: 'localhost',
   port: 5432,
   username: 'postgres',
-  password: 'stecdev1234!',
+  password: 'MEMORY506',
   database: 'sworks',
   entities: [
     Department,

@@ -17,13 +17,15 @@ import { RolesGuard } from 'src/core/Guard/roles.guard';
 import { Role } from 'src/core/role/role';
 import { Roles } from 'src/core/decorator/roles.decorator';
 import { EditPermDto } from './dto/edit-perm.dto';
+import { Public } from 'src/core/decorator/public.decorator';
 
 @Controller('workplace')
 export class WorkplaceController {
   constructor(private workplaceService: WorkplaceService) {}
 
   @Get('/all')
-  @Roles(Role.MANAGER, Role.NORMAL)
+  @Public()
+  // @Roles(Role.MANAGER, Role.NORMAL)
   @UseGuards(RolesGuard)
   async findAll(
     @Query('page') page: number,
