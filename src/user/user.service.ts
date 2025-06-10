@@ -85,7 +85,7 @@ export class UserService {
       where: {
         id,
       },
-      relations: ['department', 'workplace.workplace'],
+      relations: ['department', 'workplaces.workplace'],
     });
 
     if (!res) {

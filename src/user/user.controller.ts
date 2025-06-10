@@ -34,7 +34,7 @@ export class UserController {
   }
 
   /**
-   * 테스트용으로 account받음
+   * 관리자 상세조회
    * @param id
    * @returns
    */
