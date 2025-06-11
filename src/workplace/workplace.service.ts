@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Workplace } from './entities/workplace.entity';
-import { InsertResult, Repository, UpdateResult } from 'typeorm';
+import { In, InsertResult, Like, Repository, UpdateResult } from 'typeorm';
 import { CreateWorkplaceDto } from './dto/create-workplace.dto';
 import { ListModel } from 'src/core/dto/list-type.dto';
 import { WorkplaceAdmin } from './entities/workplace-admin.entity';
@@ -36,13 +36,31 @@ export class WorkplaceService {
    * @param pageSize
    * @returns
    */
-  async findAll(page: number, pageSize: number) {
+  async findAll(
+    page: number,
+    pageSize: number,
+    search?: string,
+    status?: string | string[],
+  ) {
+    // console.log('=====================');
+    // console.log('page : ', page);
+    // console.log('pageSize : ', pageSize);
+    // console.log('search : ', search);
+    // console.log('status : ', status);
+
+    const whereCondition: any = {};
+
+    whereCondition.name = Like(`%${search}%`);
+    whereCondition.state =
+      Array.isArray(status) && status.length > 0 ? In(status) : status;
+
     const [items, totalCount] = await this.workplaceRepository.findAndCount({
       skip: (page - 1) * pageSize,
       take: pageSize,
       order: {
         contractedAt: 'DESC',
       },
+      where: whereCondition,
     });
 
     const data: ListModel<Workplace> = {

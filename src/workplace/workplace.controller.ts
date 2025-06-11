@@ -30,8 +30,10 @@ export class WorkplaceController {
   async findAll(
     @Query('page') page: number,
     @Query('pageSize') pageSize: number,
+    @Query('search') search: string,
+    @Query('status') status: string | string[],
   ) {
-    return await this.workplaceService.findAll(page, pageSize);
+    return await this.workplaceService.findAll(page, pageSize, search, status);
   }
 
   @Get(':id')
