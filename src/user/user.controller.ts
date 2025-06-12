@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { User } from './entities/user.entity';
 import { Public } from 'src/core/decorator/public.decorator';
 import { DetailAdmin } from './dto/detail-admin.dto';
 import { CreateUser } from './dto/create-user.dto';
+import { CreateAdmin } from './dto/create-admin.dto';
 
 @Controller('user')
 export class UserController {
@@ -20,6 +22,26 @@ export class UserController {
   @Get('all')
   async findAll(): Promise<User[] | null> {
     return await this.userService.findAdminAll();
+  }
+
+  /**
+   * 관리자 전체 조회
+   */
+  @Get('admin/all')
+  async findAllAdmin(
+    @Query('page') page: number,
+    @Query('pageSize') pageSize: number,
+    @Query('search') search: string,
+    @Query('department') department: string | string[],
+    @Query('permission') permission: string | string[],
+  ) {
+    return await this.userService.findAdminAllPagination(
+      page,
+      pageSize,
+      search,
+      department,
+      permission,
+    );
   }
 
   /**
@@ -46,7 +68,7 @@ export class UserController {
 
   @Public()
   @Post('create/admin')
-  async createAdmin(@Body() admin: User) {
+  async createAdmin(@Body() admin: CreateAdmin) {
     return this.userService.createAdmin(admin);
   }
 

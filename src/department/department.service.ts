@@ -15,6 +15,10 @@ export class DepartmentService {
     return await this.deptRepository.insert(dept);
   }
 
+  async findOneByName(name: string) {
+    return await this.deptRepository.findOne({ where: { name } });
+  }
+
   async findAll(): Promise<Department[]> {
     return await this.deptRepository.find();
   }

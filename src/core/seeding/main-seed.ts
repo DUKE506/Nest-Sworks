@@ -10,6 +10,7 @@ import { Floor } from 'src/building/entities/floor.entity';
 import { Room } from 'src/building/entities/room.entity';
 import { Facility } from 'src/facility/entities/facility.enrity';
 import { Voc } from 'src/voc/entities/voc.entity';
+import { NotFoundError } from 'rxjs';
 
 const dataSource = new DataSource({
   type: 'postgres', // 사용 중인 데이터베이스 타입
@@ -55,10 +56,16 @@ const seed = async () => {
     phone: '01032665670',
     email: 'duke@gmail.com',
     permission: 'MANAGER',
-    department: resDept,
+    department: '시스템개발연구소',
   };
   console.log('Adding Admin...');
-  await userRepository.insert({ ...user, status: 'WORK' });
+  const hasDept = await departmentRepository.findOne({
+    where: { name: dept.name },
+  });
+
+  if (!hasDept) return console.log('부서가 존재하지 않습니다.');
+
+  await userRepository.insert({ ...user, department: hasDept, status: 'WORK' });
   console.log('Admin Success');
 };
 
