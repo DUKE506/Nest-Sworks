@@ -183,4 +183,16 @@ export class WorkplaceService {
     console.log(res);
     return res;
   }
+
+  /**
+   * ==============사업장==============
+   */
+
+  /**
+   * 관리자에게 추가되지않은 사업장 조회
+   * @param id
+   */
+  async findNotAddedWorkplaceById(id: number) {
+    // const userWorkplace = await this.workplaceAdminRepository.find({where: }).
+  }
 }

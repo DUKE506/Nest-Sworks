@@ -57,4 +57,9 @@ export class WorkplaceController {
   async editPerm(@Body() perms: EditPermDto, @Param('id') id: number) {
     return await this.workplaceService.editPerm(perms, id);
   }
+
+  @Get(':id/not/workplace')
+  findNotAddedWorkplaceById(@Param('id') id: number) {
+    return this.workplaceService.findNotAddedWorkplaceById(id);
+  }
 }
