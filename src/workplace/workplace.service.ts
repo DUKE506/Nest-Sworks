@@ -185,7 +185,7 @@ export class WorkplaceService {
   }
 
   /**
-   * ==============사업장==============
+   * ==============관리자==============
    */
 
   /**
@@ -260,5 +260,23 @@ export class WorkplaceService {
     });
 
     return deleteWorkplaces;
+  }
+
+  /**
+   * 관리자 사업장 조회
+   */
+  async findOneAdminWorkplaceByIds(userId: number, workplaceid: number) {
+    const hasWorkplace = await this.workplaceAdminRepository.findOne({
+      relations: {
+        user: true,
+        workplace: true,
+      },
+      where: {
+        workplace: { id: workplaceid },
+        user: { id: userId },
+      },
+    });
+
+    return hasWorkplace;
   }
 }

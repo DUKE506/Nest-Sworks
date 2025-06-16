@@ -18,7 +18,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
     const token = req.headers['authorization'];
-    console.log('들어온 토큰', token);
+    // console.log('헤더', req.headers);
+    // console.log('들어온 토큰', token);
 
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
