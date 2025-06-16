@@ -34,4 +34,10 @@ export class AppController {
   getProfile(@Request() req) {
     return req.user;
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('auth/select/workplace')
+  async selectWorkplace(@Request() req, @Body() body: { workplaceId: number }) {
+    return this.authService.selectWorkplace(req.user, body.workplaceId);
+  }
 }

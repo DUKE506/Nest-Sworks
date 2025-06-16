@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Workplace } from './entities/workplace.entity';
-import { In, InsertResult, Like, Repository, UpdateResult } from 'typeorm';
+import { In, InsertResult, Like, Not, Repository, UpdateResult } from 'typeorm';
 import { CreateWorkplaceDto } from './dto/create-workplace.dto';
 import { ListModel } from 'src/core/dto/list-type.dto';
 import { WorkplaceAdmin } from './entities/workplace-admin.entity';
@@ -192,7 +192,73 @@ export class WorkplaceService {
    * 관리자에게 추가되지않은 사업장 조회
    * @param id
    */
-  async findNotAddedWorkplaceById(id: number) {
-    // const userWorkplace = await this.workplaceAdminRepository.find({where: }).
+  async findRestWorkplaceById(id: number) {
+    const hasAdmin = await this.userService.findAdminDetailById(id);
+    if (!hasAdmin) return new NotFoundException('관리자가 존재하지 않습니다.');
+
+    //현재 본인 할당된 사업장 조회
+    const addedWorkplace = await this.workplaceAdminRepository.find({
+      where: { user: { id: hasAdmin.id } },
+      relations: { workplace: true },
+    });
+
+    const addedWorkplaceIds = addedWorkplace.map(
+      (admin) => admin.workplace?.id,
+    );
+
+    //나머지 할당된 사업장을 제외한 사업장 조회
+    //관계 필드에서  Like, In, Not 등... 사용불가
+    // id를 배열화 시켜 id비교
+    const restWorkplace = await this.workplaceRepository.find({
+      relations: { workplaceAdmins: true },
+      where:
+        addedWorkplaceIds.length > 0 ? { id: Not(In(addedWorkplaceIds)) } : {},
+    });
+
+    return restWorkplace;
+  }
+
+  /**
+   * 관리자 담당 사업장 추가
+   */
+  async addAdminWorkplace(workplaces: Workplace[], id: number) {
+    const hasAdmin = await this.userService.findAdminDetailById(id);
+    if (!hasAdmin) return new NotFoundException('관리자가 존재하지 않습니다.');
+
+    /**
+     * 존재하는 사업장인지 확인
+     * 추가
+     */
+    const workplaceIds = workplaces.map((w) => w.id);
+    const hasWorkplaces = await this.workplaceRepository.find({
+      where: {
+        id: In(workplaceIds),
+      },
+    });
+
+    const addWorkplace = await this.workplaceAdminRepository.insert(
+      hasWorkplaces.map((w) => ({
+        workplace: w,
+        user: hasAdmin,
+      })),
+    );
+
+    return addWorkplace;
+  }
+
+  /**
+   * 관리자 담당 사업장 삭제
+   */
+  async deleteAdminWorkplace(id: number, delWorkplaces: Workplace[]) {
+    const hasAdmin = await this.userService.findAdminDetailById(id);
+    if (!hasAdmin) return new NotFoundException('관리자가 존재하지 않습니다.');
+
+    const delWorkplaceIds = delWorkplaces.map((w) => w.id);
+
+    const deleteWorkplaces = await this.workplaceAdminRepository.delete({
+      id: In(delWorkplaceIds),
+    });
+
+    return deleteWorkplaces;
   }
 }

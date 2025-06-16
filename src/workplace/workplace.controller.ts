@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -58,8 +59,29 @@ export class WorkplaceController {
     return await this.workplaceService.editPerm(perms, id);
   }
 
-  @Get(':id/not/workplace')
-  findNotAddedWorkplaceById(@Param('id') id: number) {
-    return this.workplaceService.findNotAddedWorkplaceById(id);
+  /**
+   * =======================관리자가 사업장 추가 =======================
+   */
+
+  @Get(':id/rest')
+  findRestWorkplaceById(@Param('id') id: number) {
+    console.log('남은 사업장 조회');
+    return this.workplaceService.findRestWorkplaceById(id);
+  }
+
+  @Post(':id/add')
+  async addAdminWorkplace(
+    @Body() workplaces: Workplace[],
+    @Param('id') id: number,
+  ) {
+    return await this.workplaceService.addAdminWorkplace(workplaces, id);
+  }
+
+  @Put(':id/delete')
+  async deleteWorkplaceAdmin(
+    @Param('id') id: number,
+    @Body() delWorkplaces: Workplace[],
+  ) {
+    return await this.workplaceService.deleteAdminWorkplace(id, delWorkplaces);
   }
 }

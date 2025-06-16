@@ -2,12 +2,14 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { LoginDto } from './dto/login.dto';
 import { UserService } from 'src/user/user.service';
 import { JwtService } from '@nestjs/jwt';
+import { WorkplaceService } from 'src/workplace/workplace.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private workplaceService: WorkplaceService,
   ) {}
 
   /**
@@ -43,5 +45,11 @@ export class AuthService {
       place_id: user?.workplace?.id ?? null,
       user: user,
     };
+  }
+
+  async selectWorkplace(userPayload: any, workplaceId: number) {
+    //1. 사용자 검증
+    console.log(userPayload.sub);
+    // const user = await this.userService.findAdminDetailById(userPayload.sub)
   }
 }
