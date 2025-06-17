@@ -49,7 +49,7 @@ export class AuthService {
 
   async selectWorkplace(userPayload: any, workplaceId: number) {
     //1. 사용자 검증
-    console.log(userPayload);
+
     const user = await this.userService.findAdminDetailById(userPayload.sub);
     if (!user) throw new UnauthorizedException('사용자가 존재하지 않습니다.');
 
@@ -58,7 +58,7 @@ export class AuthService {
       userPayload.sub,
       workplaceId,
     );
-    console.log(hasAccess);
+
     if (!hasAccess)
       throw new UnauthorizedException('해당 사업장에 접근 권한이 없습니다.');
 

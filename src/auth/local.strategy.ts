@@ -19,13 +19,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     account: string,
     password: string,
   ): Promise<any> {
-    // const loginType = req.params.loginType;
-    console.log(account, password);
     const user = await this.authService.validateUser(account, password);
 
     if (!user) {
       throw new UnauthorizedException('로그인 실패');
     }
+
     return user;
   }
 }

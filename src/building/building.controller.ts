@@ -1,54 +1,60 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { BuildingService } from './building.service';
 import { Public } from 'src/core/decorator/public.decorator';
 import { CreateBuilding } from './dto/create-buliding.dto';
 import { Building } from './entities/building.entity';
 import { CreateFloor } from './dto/create-floor.dto';
 import { CreateRoom } from './dto/create-room.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('building')
 export class BuildingController {
   constructor(private buildingService: BuildingService) {}
 
-  @Public()
-  @Get('all/:workplaceid')
-  async findAll(
-    @Param('workplaceid') workplaceid: number,
-  ): Promise<Building[]> {
-    return await this.buildingService.findAllBuilding(workplaceid);
+  @Get('all')
+  @UseGuards(JwtAuthGuard)
+  async findAll(@Req() req) {
+    return await this.buildingService.findAllBuilding(req.user.workplaceId);
   }
 
-  @Public()
-  @Post('create/:workplaceid')
-  async createBuilding(
-    @Body() building: CreateBuilding,
-    @Param('workplaceid') workplaceid: number,
-  ) {
-    return await this.buildingService.createBuilding(building, workplaceid);
+  @Post('create')
+  @UseGuards(JwtAuthGuard)
+  async createBuilding(@Body() building: CreateBuilding, @Req() req) {
+    return await this.buildingService.createBuilding(building, req.user);
   }
 
-  @Public()
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: number): Promise<Building | null> {
     return await this.buildingService.findOneById(id);
   }
 
-  @Public()
-  @Get('all/name/:id')
-  async findAllName(@Param('workplaceid') workplaceid: number) {
-    return await this.buildingService.findAllBuildingName(workplaceid);
+  @Get('all/name')
+  @UseGuards(JwtAuthGuard)
+  async findAllName(@Req() req) {
+    return await this.buildingService.findAllBuildingName(req.workplaceId);
   }
 
   //=======층=======
 
   @Public()
   @Post(':id/floor/add')
+  @UseGuards(JwtAuthGuard)
   async createFloor(@Body() floor: CreateFloor, @Param('id') id: number) {
     return await this.buildingService.createFloor(floor, id);
   }
 
   @Public()
   @Get(':id/floor/all')
+  @UseGuards(JwtAuthGuard)
   async findAllFloor(@Param('id') id: number) {
     return await this.buildingService.findAllFloor(id);
   }

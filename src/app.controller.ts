@@ -7,6 +7,7 @@ import {
   Body,
   HttpCode,
   Param,
+  Req,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 
@@ -35,9 +36,9 @@ export class AppController {
     return req.user;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('auth/select/workplace')
-  async selectWorkplace(@Request() req, @Body() body: { workplaceId: number }) {
+  @UseGuards(JwtAuthGuard)
+  async selectWorkplace(@Req() req, @Body() body: { workplaceId: number }) {
     return this.authService.selectWorkplace(req.user, body.workplaceId);
   }
 }
