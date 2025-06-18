@@ -28,7 +28,11 @@ export class BuildingController {
   @Post('create')
   @UseGuards(JwtAuthGuard)
   async createBuilding(@Body() building: CreateBuilding, @Req() req) {
-    return await this.buildingService.createBuilding(building, req.user);
+    console.log(req.user);
+    return await this.buildingService.createBuilding(
+      building,
+      req.user.workplaceId,
+    );
   }
 
   @Get(':id')
@@ -61,22 +65,17 @@ export class BuildingController {
 
   //=======위치=======
 
-  @Public()
-  @Post(':buildingid/room/:floorid/add')
+  @Post(':buildingId/room/add')
+  @UseGuards(JwtAuthGuard)
   async createRoom(
     @Body() createRoom: CreateRoom,
-    @Param('buildingid') buildingid: number,
-    @Param('floorid') floorid: number,
+    @Param('buildingId') buildingId: number,
   ) {
-    return await this.buildingService.createRoom(
-      createRoom,
-      buildingid,
-      floorid,
-    );
+    return await this.buildingService.createRoom(createRoom, buildingId);
   }
 
-  @Public()
   @Get('floor/room/:workplaceid')
+  @UseGuards(JwtAuthGuard)
   async(@Param('workplaceid') workplaceid: number) {
     return this.buildingService.findAllLocationTree(workplaceid);
   }

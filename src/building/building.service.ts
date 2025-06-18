@@ -28,10 +28,10 @@ export class BuildingService {
     });
   }
 
-  async createBuilding(building: CreateBuilding, workplaceid) {
+  async createBuilding(building: CreateBuilding, workplaceId: number) {
     return await this.buildingRepository.insert({
       ...building,
-      workplace: { id: workplaceid },
+      workplace: { id: workplaceId },
     });
   }
 
@@ -107,13 +107,13 @@ export class BuildingService {
     return room;
   }
 
-  async createRoom(room: CreateRoom, buildingid: number, floorid: number) {
-    const floor = await this.findOneFloorById(buildingid, floorid);
+  async createRoom(room: CreateRoom, buildingid: number) {
+    const floor = await this.findOneFloorById(buildingid, room.floor);
     if (!floor) {
       throw new NotFoundException(`층이 존재하지 않습니다.`);
     }
 
-    return await this.roomRepository.save({ ...room, floor: { id: floorid } });
+    return await this.roomRepository.save({ ...room, floor: { id: floor.id } });
   }
 
   /**

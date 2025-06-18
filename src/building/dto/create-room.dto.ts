@@ -1,7 +1,8 @@
-import { Column } from "typeorm";
-
+import { Column } from 'typeorm';
 
 export class CreateRoom {
-    @Column()
-    name: string;
+  @Column()
+  floor: number;
+  @Column()
+  name: string;
 }
