@@ -136,17 +136,6 @@ export class WorkplaceService {
       password,
       email: `name@s-tec.co.kr`,
       phone: tel,
-      permission: 'USER',
-      basicPerm: 2,
-      machinePerm: 2,
-      electricPerm: 2,
-      firePerm: 2,
-      buildingPerm: 2,
-      networkPerm: 2,
-      beautyPerm: 2,
-      securityPerm: 2,
-      userPerm: 2,
-      vocPerm: 2,
     };
 
     await this.userService.createUser(createUser, workplace.id);

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseEntity } from 'src/core/entity/base.entity';
 import { Department } from 'src/department/entities/department.entity';
+import { Permission } from 'src/perm/entities/work-perm.entity';
 import { WorkplaceAdmin } from 'src/workplace/entities/workplace-admin.entity';
 import { Workplace } from 'src/workplace/entities/workplace.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
@@ -61,14 +62,6 @@ export class User extends BaseEntity {
   email: string;
 
   @ApiProperty({
-    name: 'permission',
-    description: '권한',
-    example: 'MANAGER',
-  })
-  @Column('varchar')
-  permission: UserPermissionType;
-
-  @ApiProperty({
     name: 'status',
     description: '상태',
     example: 'WORK',
@@ -76,83 +69,6 @@ export class User extends BaseEntity {
   @Column('varchar')
   status: 'WORK' | 'OFF' | 'RESIGN';
 
-  @ApiProperty({
-    name: 'basicPerm',
-    description: '기본권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  basicPerm: number;
-
-  @ApiProperty({
-    name: 'machinePerm',
-    description: '기계설비 권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  machinePerm: number;
-
-  @ApiProperty({
-    name: 'electricPerm',
-    description: '전기설비 권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  electricPerm: number;
-
-  @ApiProperty({
-    name: 'firePerm',
-    description: '기소방설비 권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  firePerm: number;
-
-  @ApiProperty({
-    name: 'buildingPerm',
-    description: '건축설비 권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  buildingPerm: number;
-
-  @ApiProperty({
-    name: 'networkPerm',
-    description: '통신설비 권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  networkPerm: number;
-
-  @ApiProperty({
-    name: 'beautyPerm',
-    description: '미화설비 권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  beautyPerm: number;
-
-  @ApiProperty({
-    name: 'securityPerm',
-    description: '보안설비 권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  securityPerm: number;
-
-  @ApiProperty({
-    name: 'userPerm',
-    description: '사용자권한',
-    example: '2',
-  })
-  @Column({ nullable: true })
-  userPerm: number;
-
-  @ApiProperty({
-    name: 'vocPerm',
-    description: '민원권한',
-    example: '2',
-  })
   @Column({ nullable: true })
   vocPerm: number;
 
@@ -164,6 +80,9 @@ export class User extends BaseEntity {
 
   @ManyToOne(() => Workplace, (workplace) => workplace.users)
   workplace: Workplace;
+
+  @ManyToOne(() => Permission, (permission) => permission.users)
+  permission: Permission;
 }
 
 const UserPermission = {

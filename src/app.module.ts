@@ -17,6 +17,9 @@ import { FacilityModule } from './facility/facility.module';
 import { VocController } from './voc/voc.controller';
 import { VocService } from './voc/voc.service';
 import { VocModule } from './voc/voc.module';
+import { PermController } from './perm/perm.controller';
+import { PermService } from './perm/perm.service';
+import { PermModule } from './perm/perm.module';
 
 @Module({
   imports: [
@@ -42,6 +45,7 @@ import { VocModule } from './voc/voc.module';
     BuildingModule,
     FacilityModule,
     VocModule,
+    PermModule,
   ],
   controllers: [AppController],
   providers: [AppService, { provide: APP_GUARD, useClass: JwtAuthGuard }],

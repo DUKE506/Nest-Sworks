@@ -19,6 +19,10 @@ export class DepartmentService {
     return await this.deptRepository.findOne({ where: { name } });
   }
 
+  async findOneById(id: number) {
+    return await this.deptRepository.findOne({ where: { id } });
+  }
+
   async findAll(): Promise<Department[]> {
     return await this.deptRepository.find();
   }

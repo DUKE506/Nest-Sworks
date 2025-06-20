@@ -7,8 +7,8 @@ export class CreateAdmin {
   password: string;
   email: string;
   phone: string;
-  permission: UserPermissionType;
-  department: string;
+  department: number;
+  permission?: string;
 
   constructor({
     name,
@@ -16,23 +16,23 @@ export class CreateAdmin {
     password,
     email,
     phone,
-    permission,
     department,
+    permission,
   }: {
     name: string;
     account: string;
     password: string;
     email: string;
     phone: string;
-    permission: UserPermissionType;
-    department: string;
+    department: number;
+    permission: string;
   }) {
     this.name = name;
     this.account = account;
     this.password = password;
     this.email = email;
     this.phone = phone;
-    this.permission = permission;
     this.department = department;
+    this.permission = permission;
   }
 }

@@ -4,6 +4,7 @@ import { Department } from 'src/department/entities/department.entity';
 import { Workplace } from 'src/workplace/entities/workplace.entity';
 import { Column } from 'typeorm';
 import { UserPermissionType } from '../entities/user.entity';
+import { Permission } from 'src/perm/entities/work-perm.entity';
 
 export class DetailAdmin extends BaseEntity {
   /**
@@ -62,10 +63,10 @@ export class DetailAdmin extends BaseEntity {
   @ApiProperty({
     name: 'permission',
     description: '권한',
-    example: 'MANAGER',
+    example: '운영관리자',
   })
   @Column('varchar')
-  permission: UserPermissionType;
+  permission: Permission;
 
   @ApiProperty({
     name: 'department',

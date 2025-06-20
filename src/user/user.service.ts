@@ -14,6 +14,8 @@ import { ListModel } from 'src/core/dto/list-type.dto';
 import { CreateAdmin } from './dto/create-admin.dto';
 import { Department } from 'src/department/entities/department.entity';
 import { DepartmentService } from 'src/department/department.service';
+import { PermissionEnum } from 'src/perm/entities/work-perm.entity';
+import { PermService } from 'src/perm/perm.service';
 
 @Injectable()
 export class UserService {
@@ -26,6 +28,9 @@ export class UserService {
 
     @Inject(forwardRef(() => DepartmentService))
     private departmentService: DepartmentService,
+
+    @Inject(forwardRef(() => PermService))
+    private permService: PermService,
   ) {}
 
   private readonly user: User;
@@ -49,8 +54,15 @@ export class UserService {
    */
   async findAdminAll() {
     return await this.userRepository.find({
-      where: [{ permission: 'MANAGER' }, { permission: 'NORMAL' }],
-      relations: { department: true },
+      where: [
+        {
+          permission: [
+            { permission: PermissionEnum.운영관리자 },
+            { permission: PermissionEnum.일반관리자 },
+          ],
+        },
+      ],
+      relations: { department: true, permission: true },
     });
   }
 
@@ -70,46 +82,49 @@ export class UserService {
     // console.log('search : ', search);
     // console.log('department : ', department);
     // console.log('permission : ', permission);
-    const whereCondition: any = {};
-    //검색어
-    whereCondition.name = Like(`%${search}%`);
-    //권한
-    if (permission === undefined) {
-      whereCondition.permission = In([]);
-    } else {
-      whereCondition.permission = Array.isArray(permission)
-        ? In(permission)
-        : permission;
-      whereCondition.per;
+    try {
+      const whereCondition: any = {};
+      //검색어
+      whereCondition.name = Like(`%${search}%`);
+      //권한
+      if (permission === undefined) {
+        whereCondition.permission = In([]);
+      } else {
+        whereCondition.permission = Array.isArray(permission)
+          ? { permission: In(permission) }
+          : { permission: permission };
+      }
+
+      //부서
+      if (department === undefined) {
+        whereCondition.department = In([]);
+      } else {
+        whereCondition.department = Array.isArray(department)
+          ? { name: In(department) }
+          : { name: department };
+      }
+
+      const [items, totalCount] = await this.userRepository.findAndCount({
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        relations: { department: true, permission: true },
+        where: whereCondition,
+      });
+
+      const data: ListModel<User> = {
+        meta: {
+          totalCount,
+          pageSize,
+          page,
+        },
+        data: items,
+      };
+
+      return data;
+    } catch (err) {
+      console.error(err.code);
+      return;
     }
-
-    //부서
-    if (department === undefined) {
-      whereCondition.department = In([]);
-    } else {
-      whereCondition.department = Array.isArray(department)
-        ? { name: In(department) }
-        : { name: department };
-    }
-
-    const [items, totalCount] = await this.userRepository.findAndCount({
-      skip: (page - 1) * pageSize,
-      take: pageSize,
-      relations: { department: true },
-      where: whereCondition,
-    });
-
-    const data: ListModel<User> = {
-      meta: {
-        totalCount,
-        pageSize,
-        page,
-      },
-      data: items,
-    };
-    console.log('=====================');
-    console.log(data);
-    return data;
   }
 
   /**
@@ -118,18 +133,33 @@ export class UserService {
    * @returns
    */
   async createAdmin(admin: CreateAdmin) {
-    console.log(admin);
-
-    const hasDept = await this.departmentService.findOneByName(
-      admin.department,
-    );
+    const hasDept = await this.departmentService.findOneById(admin.department);
 
     if (!hasDept) return new NotFoundException('부서가 존재하지 않습니다.');
+    const { permission, ...rest } = admin;
+
+    if (!permission)
+      throw new NotFoundException('관리자 권한이 존재하지않습니다.');
+
+    var permName;
+
+    if (admin.permission === '운영관리자') {
+      permName = '운영관리자 권한';
+    }
+
+    if (admin.permission === '일반관리자') {
+      permName = '일반관리자 권한';
+    }
+    const hasPerm = await this.permService.findOneAdminPermByName(permName);
+
+    if (!hasPerm)
+      throw new NotFoundException('관리자 권한이 존재하지않습니다.');
 
     return await this.userRepository.insert({
-      ...admin,
+      ...rest,
       department: hasDept,
       status: 'WORK',
+      permission: { id: hasPerm.id },
     });
   }
 
@@ -138,12 +168,12 @@ export class UserService {
       where: {
         account,
       },
-      relations: { department: true, workplace: true },
+      relations: { department: true, workplace: true, permission: true },
     });
   }
 
   /**
-   * 상세조회회
+   * 상세조회
    * @param id
    * @returns
    */
@@ -166,7 +196,7 @@ export class UserService {
       where: {
         id,
       },
-      relations: ['department', 'workplaces.workplace'],
+      relations: ['department', 'workplaces.workplace', 'permission'],
     });
 
     if (!res) {
@@ -199,7 +229,6 @@ export class UserService {
 
     return await this.userRepository.insert({
       ...user,
-      permission: 'USER',
       status: 'WORK',
       workplace: { id: workplace.id },
     });
